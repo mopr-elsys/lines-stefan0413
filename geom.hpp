@@ -41,33 +41,26 @@ struct Line
 
     Line(const Point &p1, const Point &p2)
     {
-
-        A = (p1.y - p2.y) / (p1.x - p2.x);
-        B = -1;
-        C = p1.y - A * p1.x;
+        B = p2.x - p1.x;
+        A = p1.y - p2.y;
+        C = -(A * p1.x + B * p1.y);
     }
 
     bool parallel(const Line &other) const
     {
-        return eq(this->A / other.A, this->B / other.B); // && !(eq(this->A / other.A, this->C / other.C));
+        return eq(this->A * other.B, this->B * other.A) && this->A * other.C != other.A * this->C;
     }
 
     Line parallel(const Point &p)
     {
-
         return Line(this->A, this->B, -(this->A * p.x + this->B * p.y));
     }
 
     bool perpendicular(const Line &other) const
     {
-        return eq(this->A / other.B, this->B / other.B);
+        return eq(this->A * other.A, -(this->B * other.B));
     }
-    /*bool perpendicular(const Line &other) const
-    {
 
-        return eq((this->A / -other.B), (this->B / other.A));
-    }
-    */
     Line perpendicular(const Point &p)
     {
         return Line(-this->B, this->A, this->B * p.x - this->A * p.y);
